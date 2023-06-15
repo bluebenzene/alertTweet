@@ -1,0 +1,1 @@
+# terminal integration of madnews
