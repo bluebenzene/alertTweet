@@ -19,7 +19,7 @@ def play_alert(tag, play_twitter=True):
         "Huobi": "huobi.mp3",
         "FTX": "ftx.mp3",
         "Coinbase": "coinbase.mp3",
-        "Blogs": "whatalert.mp3",
+        "Blogs": "mixkit-musical-alert-notification-2309.wav",
         "Bloomberg": "bloomberg.mp3",
         "usGov": "usgov.mp3",
         "Twitter": "maybealertr.mp3",
