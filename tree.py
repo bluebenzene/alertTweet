@@ -74,11 +74,6 @@ async def connect_and_print(uri, play_twitter=True):
 
 uri = "wss://news.treeofalpha.com/ws"
 play_twitter_alert = False  # Set this to True to play the Twitter alert or False to turn it off
-asyncio.run(connect_and_print(uri, play_twitter_alert))
-
-
-uri = "wss://news.treeofalpha.com/ws"
 wss_like = "wss://news.treeofalpha.com/ws/likes"
 api_key=os.environ.get('treekey')
-play_twitter_alert = False
 asyncio.run(connect_and_print(uri, play_twitter_alert))
