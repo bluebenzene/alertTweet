@@ -7,8 +7,7 @@ import os
 
 def play_alert(source, twitter_id):
     twitter_id_alerts = {
-        "twitter_id1": "soundfile1.mp3",
-        "twitter_id2": "soundfile2.mp3",
+        "944686196331966464": "myside_hska.mp3", # hsakaTrades
     }
     source_alerts = {
         "Binance EN": "iamwayalert.mp3",
