@@ -4,6 +4,7 @@ import websockets
 import subprocess
 from datetime import datetime
 import os
+import gtts
 
 def play_alert(source, twitter_id):
     twitter_id_alerts = {
@@ -32,7 +33,11 @@ def play_alert(source, twitter_id):
     if file_name is not None:
         proc = subprocess.Popen(["play", f"alert_sound/{file_name}"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
         stdout, stderr = proc.communicate()
-
+def play_title(title):
+    sound = gtts.gTTS(title, lang='en', tld='us')
+    sound.save("alert_sound/textaudio.mp3")
+    proc = subprocess.Popen(["play", "alert_sound/textaudio.mp3"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+    stdout, stderr = proc.communicate()
 async def connect_and_print(uri,api_key):
     while True:
         try:
@@ -58,6 +63,7 @@ async def connect_and_print(uri,api_key):
                             url = message_json["url"] if "url" in message_json else ""
                             print(f"[{time_str}] [{source}] \033[33m{title}\033[0m {url}")
                             play_alert(source, twitter_id)
+                            play_title(title)
                     except (websockets.ConnectionClosed, websockets.ConnectionClosedError) as e:
                         # print("Connection closed, reconnecting...")
                         break
