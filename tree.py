@@ -33,10 +33,18 @@ def play_alert(source, twitter_id):
         proc = subprocess.Popen(["play", f"alert_sound/{file_name}"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
         stdout, stderr = proc.communicate()
 
-async def connect_and_print(uri):
+async def connect_and_print(uri,api_key):
     while True:
         try:
             async with websockets.connect(uri) as websocket:
+                await websocket.send(f'login {api_key}')
+                login_response = await websocket.recv()
+                response_json = json.loads(login_response)
+                if 'user' in response_json and 'username' in response_json['user']:
+                    time = int(response_json.get('time')/1000)
+                    time_str = datetime.fromtimestamp(time).strftime('%Y-%m-%d %H:%M:%S')
+                    print(f"[{time_str}] Login successful, user: {response_json['user']['username']}")
+
                 while True:
                     try:
                         message = await websocket.recv()
@@ -48,17 +56,18 @@ async def connect_and_print(uri):
                             time_str = datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
                             title = message_json["title"] if "title" in message_json else ""
                             url = message_json["url"] if "url" in message_json else ""
-                            print(f"[{time_str}] [{source}] {title} {url}")
+                            print(f"[{time_str}] [{source}] \033[33m{title}\033[0m {url}")
                             play_alert(source, twitter_id)
                     except (websockets.ConnectionClosed, websockets.ConnectionClosedError) as e:
-                        print("Connection closed, reconnecting...")
+                        # print("Connection closed, reconnecting...")
                         break
                     except Exception as e:
-                        print("Error occurred, reconnecting...")
+                        # print("Error occurred, reconnecting...")
                         break
         except Exception as e:
-            print("Error occurred, retrying...")
+            # print("Error occurred, retrying...")
             await asyncio.sleep(1)
 
 uri = "wss://news.treeofalpha.com/ws"
-asyncio.run(connect_and_print(uri))
+api_key = os.environ['treekey']
+asyncio.run(connect_and_print(uri,api_key))
