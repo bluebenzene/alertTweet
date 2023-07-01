@@ -33,7 +33,8 @@ source_alerts = {
     "usGov": "usgov.mp3",
 }
 
-def play_alert(source, twitter_id):
+
+def play_alert(source, twitter_id, title=None, body=None):
     file_name = None
     if twitter_id in twitter_id_alerts:
         file_name = twitter_id_alerts[twitter_id]
@@ -43,11 +44,12 @@ def play_alert(source, twitter_id):
         proc = subprocess.Popen(["play", f"alert_sound/{file_name}"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
         stdout, stderr = proc.communicate()
 
-def play_title(title):
-    sound = gtts.gTTS(title, lang='en', tld='us')
-    sound.save("alert_sound/textaudio.mp3")
-    proc = subprocess.Popen(["play", "alert_sound/textaudio.mp3"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
-    stdout, stderr = proc.communicate()
+    if title or body:  # If there's a title or body, play them
+        sound_text = f"{title if title else ''} {body if body else ''}"
+        sound = gtts.gTTS(sound_text, lang='en', tld='us')
+        sound.save("alert_sound/textaudio.mp3")
+        proc = subprocess.Popen(["play", "alert_sound/textaudio.mp3"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+        stdout, stderr = proc.communicate()
 
 async def connect_and_print(uri,api_key):
     while True:
@@ -65,16 +67,17 @@ async def connect_and_print(uri,api_key):
                     try:
                         message = await websocket.recv()
                         message_json = json.loads(message)
-                        twitter_id = message_json["info"]["twitterId"] if "info" in message_json and "twitterId" in message_json["info"] else None
-                        source = message_json["source"] if "source" in message_json else None
+                        twitter_id = message_json["info"]["twitterId"] if "info" in message_json and "twitterId" in \
+                                                                          message_json["info"] else None
+                        source = message_json.get("source") if "source" in message_json else "Twitter"
                         if (source and source in source_alerts) or (twitter_id and twitter_id in twitter_id_alerts):
                             timestamp = int(message_json["time"] / 1000)
                             time_str = datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
-                            title = message_json["title"] if "title" in message_json else ""
+                            title = message_json.get("title").replace("\n", " ")
                             url = message_json["url"] if "url" in message_json else ""
-                            print(f"[{time_str}] [{source}] \033[33m{title}\033[0m {url}")
-                            play_alert(source, twitter_id)
-                            play_title(title)
+                            body = message_json.get("body")
+                            print(f"[{time_str}] [{source}] \033[33m{title} {body}\033[0m {url}")
+                            play_alert(source, twitter_id, title, body if body else None)
                     except (websockets.ConnectionClosed, websockets.ConnectionClosedError) as e:
                         # print("Connection closed, reconnecting...")
                         break
