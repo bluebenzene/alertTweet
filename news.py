@@ -5,7 +5,7 @@ import subprocess
 from datetime import datetime
 import gtts
 twitter_id_alerts = {
-    "944686196331966464": "myside_hska.mp3", # hsakaTrades
+    "944686196331966464": "fluit.mp3", # hsakaTrades
     "44196397": "fluit.mp3", #elon musk
     "2361601055": "fluit.mp3", #db
     "1391538435261861894": "fluit.mp3", #zoomerfied
@@ -16,18 +16,18 @@ twitter_id_alerts = {
     "TheBlock__": "fluit.mp3" , #theblock
 }
 source_alerts = {
-    "Binance EN": "iamwayalert.mp3",
-    "Coinbase": "nextlalala.mp3",
-    "Kraken": "kraken.mp3",
-    "Bithumb": "bithumb.mp3",
-    "Upbit": "squidgame_alert.mp3",
-    "Bitfinex": "bitfinex.mp3",
-    "Huobi": "huobi.mp3",
-    "FTX": "ftx.mp3",
-    "Coinbase": "coinbase.mp3",
+    "Binance EN": "fluit.mp3",
+    "Coinbase": "fluit.mp3",
+    "Kraken": "fluit.mp3",
+    "Bithumb": "fluit.mp3",
+    "Upbit": "fluit.mp3",
+    "Bitfinex": "fluit.mp3",
+    "Huobi": "fluit.mp3",
+    "FTX": "fluit.mp3",
+    "Coinbase": "fluit.mp3",
     "Blogs": "fluit.mp3",
-    "Bloomberg": "bloomberg.mp3",
-    "usGov": "usgov.mp3",
+    "Bloomberg": "fluit.mp3",
+    "usGov": "fluit.mp3",
 }
 
 
