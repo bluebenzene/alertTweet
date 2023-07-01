@@ -5,6 +5,7 @@ import subprocess
 from datetime import datetime
 import os
 import gtts
+import re
 
 # Moved the twitter_id_alerts and source_alerts here to make them global
 twitter_id_alerts = {
@@ -73,8 +74,8 @@ async def connect_and_print(uri,api_key):
                         if (source and source in source_alerts) or (twitter_id and twitter_id in twitter_id_alerts):
                             timestamp = int(message_json["time"] / 1000)
                             time_str = datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
-                            title = message_json.get("title").replace("\n", " ")
-                            url = message_json["url"] if "url" in message_json else ""
+                            title = re.sub(r'\(.*?\)', '', message_json.get("title")).replace("\n", " ")
+                            url = message_json["url"] if "url" in message_jsonz else ""
                             body = message_json.get("body")
                             print(f"[{time_str}] [{source}] \033[33m{title} {body}\033[0m {url}")
                             play_alert(source, twitter_id, title, body if body else None)
