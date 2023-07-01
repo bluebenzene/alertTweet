@@ -61,7 +61,7 @@ async def connect_and_print(uri,api_key):
                 if 'user' in response_json and 'username' in response_json['user']:
                     time = int(response_json.get('time')/1000)
                     time_str = datetime.fromtimestamp(time).strftime('%Y-%m-%d %H:%M:%S')
-                    print(f"[{time_str}] Login successful, user: {response_json['user']['username']}")
+                    # print(f"[{time_str}] Login successful, user: {response_json['user']['username']}")
 
                 while True:
                     try:
